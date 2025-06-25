@@ -49,3 +49,28 @@ def get_event(id):
     event = Event.query.get_or_404(id)
     return jsonify(event.to_dict()), 200
 
+@app.route('/tickets', methods=['POST'])
+def create_ticket():
+    data = request.get_json()
+    try:
+        ticket_type = data['ticket_type']
+        price = float(data.get('price', 0))
+        event_id = int(data['event_id'])
+
+        if ticket_type.strip() == "":
+            return jsonify({'error': 'Ticket type is required'}), 400
+
+        event = Event.query.get(event_id)
+        if not event:
+            return jsonify({'error': 'Event not found'}), 404
+
+        ticket = Ticket(ticket_type=ticket_type, price=price, event_id=event_id)
+        db.session.add(ticket)
+        db.session.commit()
+        return jsonify(ticket.to_dict()), 201
+
+    except KeyError as e:
+        return jsonify({'error': f'Missing field: {e.args[0]}'}), 400
+
+if __name__ == '__main__':
+    app.run(debug=True)
