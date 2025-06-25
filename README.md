@@ -1,87 +1,151 @@
-# Phase_4_Project-Group-4
+# 🎟️ Event Booking System API
 
-#  Flask Event Booking API
-
-This is a backend RESTful API built with Flask and SQLAlchemy that supports **event browsing**, **ticket management**, **user registration**, and **booking events**. The system supports both free and paid events and tracks attendee bookings.
-
-##  Features
-
-- User registration with role assignment (e.g., admin, attendee)
-- Event creation and listing
-- Ticket type management (e.g., VIP, Regular)
-- Booking system with status tracking
-- Relational database using SQLAlchemy ORM
-- RESTful JSON responses (to be implemented)
-
-##  Models Overview
-
-### `User`
-| Field | Type | Description |
-|-------|------|-------------|
-| id | Integer | Primary key |
-| name | String | User's full name |
-| email | String | Unique email |
-| phone | String | Phone number |
-| password_hash | String | Password hash |
-| role | String | User role (admin, attendee) |
-| created_at | DateTime | Time of creation |
+A Flask-based backend application that allows users to register, login, browse events, and book tickets. Admins can create events and tickets. Built using Flask, SQLAlchemy, and SQLite.
 
 ---
 
-### `Events`
-| Field | Type | Description |
-|-------|------|-------------|
-| id | Integer | Primary key |
-| name | String | Event title |
-| description | String | Description of the event |
-| location | String | Venue |
-| category | String | Category (e.g., Music, Business) |
-| start_time | DateTime | Start date/time |
-| end_time | DateTime | End date/time |
-| is_free | Boolean | Whether the event is free |
-| created_at | DateTime | Creation timestamp |
+## 🚀 Features
+
+- User registration and login (with hashed passwords)
+- View all events and search events by name
+- Book tickets (with availability check)
+- Admin-only:
+  - Create events
+  - Create tickets
 
 ---
 
-### `Ticket`
-| Field | Type | Description |
-|-------|------|-------------|
-| id | Integer | Primary key |
-| event_id | ForeignKey | Related event |
-| type | String | Ticket type (VIP, Regular) |
-| price | Float | Price of the ticket |
-| quantity | Integer | Total available |
-| sold | Integer | Tickets sold |
+## 🛠 Tech Stack
 
----
-
-### `Booking`
-| Field | Type | Description |
-|-------|------|-------------|
-| id | Integer | Primary key |
-| user_id | ForeignKey | User who booked |
-| event_id | ForeignKey | Event being booked |
-| ticket_id | ForeignKey | Ticket type |
-| attendee_name | String | Name on ticket |
-| attendee_email | String | Email of attendee |
-| status | String | Booking status |
-| booking_time | DateTime | Booking timestamp |
-
----
-
-##  Technologies Used
-
-- Python 3
+- Python 3.x
 - Flask
-- SQLAlchemy ORM
-- SQLite (can be switched to PostgreSQL/MySQL)
-- Flask-SQLAlchemy
+- Flask SQLAlchemy
+- SQLite (for development)
+- Werkzeug (for password hashing)
 
 ---
 
-##  Setup Instructions
+## 📦 Installation
 
-1. **Clone the repo:**
+1. **Clone the repo**
    ```bash
-   git clone https://github.com/yourusername/event-booking-api.git
-   cd event-booking-api
+   git clone https://github.com/yourusername/event-booking-system.git
+   cd event-booking-system
+Create and activate a virtual environment
+
+bash
+Copy
+Edit
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+Install dependencies
+
+bash
+Copy
+Edit
+pip install -r requirements.txt
+Run the application
+
+bash
+Copy
+Edit
+python app.py
+🌐 API Endpoints
+🔐 Authentication
+POST /register
+Register a new user.
+
+Request JSON:
+
+json
+Copy
+Edit
+{
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "phone": "0712345678",
+  "password": "secure123",
+  "role": "admin"   // Optional, default is "attendee"
+}
+POST /login
+Login as existing user.
+
+Request JSON:
+
+json
+Copy
+Edit
+{
+  "email": "jane@example.com",
+  "password": "secure123"
+}
+📅 Events
+GET /events
+Get a list of all events.
+
+GET /events/search?name=Tech
+Search for events by name (case-insensitive).
+
+POST /events (Admin only)
+Create a new event.
+
+Request JSON:
+
+json
+Copy
+Edit
+{
+  "user_id": 1,
+  "name": "Tech Summit",
+  "description": "Annual technology conference",
+  "location": "Nairobi",
+  "category": "Technology",
+  "start_time": "2025-08-10 10:00:00",
+  "end_time": "2025-08-10 17:00:00",
+  "is_free": false
+}
+🎟 Tickets
+POST /tickets (Admin only)
+Create a ticket type for an event.
+
+Request JSON:
+
+json
+Copy
+Edit
+{
+  "user_id": 1,
+  "event_id": 2,
+  "type": "VIP",
+  "price": 100.0,
+  "quantity": 50
+}
+📌 Bookings
+POST /book
+Book a ticket for an event.
+
+Request JSON:
+
+json
+Copy
+Edit
+{
+  "user_id": 3,
+  "event_id": 2,
+  "ticket_id": 1,
+  "attendee_name": "John Doe",
+  "attendee_email": "john@example.com"
+}
+🧪 Sample Admin User Creation
+You can register an admin by including "role": "admin" in the registration payload.
+
+📁 Project Structure
+csharp
+Copy
+Edit
+event-booking-system/
+│
+├── app.py              # Main Flask application
+├── event.db            # SQLite database (created after first run)
+├── requirements.txt    # Python dependencies
+└── README.md           # This file
