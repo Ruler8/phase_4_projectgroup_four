@@ -44,3 +44,8 @@ def create_event():
     except KeyError as e:
         return jsonify({'error': f'Missing field: {e.args[0]}'}), 400
 
+@app.route('/events/<int:id>', methods=['GET'])
+def get_event(id):
+    event = Event.query.get_or_404(id)
+    return jsonify(event.to_dict()), 200
+
