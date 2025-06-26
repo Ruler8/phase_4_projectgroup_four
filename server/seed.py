@@ -1,24 +1,42 @@
-from app import app, db
-from models import Event, Ticket
+from app import app
+from models import db, Event, Ticket
 from datetime import datetime
 
 with app.app_context():
-    db.drop_all()
-    db.create_all()
+    print("🌱 Seeding database...")
 
+    # Delete old records
+    Ticket.query.delete()
+    Event.query.delete()
+
+    # Create events
     event1 = Event(
-        name="FlaskConf 2025",
-        location="Nairobi",
-        description="Annual Python + Flask Conference",
-        date=datetime(2025, 9, 1, 10),
+        name="Tech Expo Nairobi",
+        description="Explore latest tech innovations.",
+        location="KICC",
+        date=datetime(2025, 7, 20, 10, 0),
         is_paid=True,
+        capacity=150
+    )
+
+    event2 = Event(
+        name="Startup Pitch Night",
+        description="Local startups pitch ideas to investors.",
+        location="iHub",
+        date=datetime(2025, 8, 5, 18, 30),
+        is_paid=False,
         capacity=100
     )
-    db.session.add(event1)
+
+    db.session.add_all([event1, event2])
     db.session.commit()
 
-    ticket1 = Ticket(ticket_type="Regular", price=500.0, event_id=event1.id)
+    # Create tickets
+    ticket1 = Ticket(ticket_type="Standard", price=500.0, event_id=event1.id)
     ticket2 = Ticket(ticket_type="VIP", price=1500.0, event_id=event1.id)
-    db.session.add_all([ticket1, ticket2])
+    ticket3 = Ticket(ticket_type="General", price=0.0, event_id=event2.id)
+
+    db.session.add_all([ticket1, ticket2, ticket3])
     db.session.commit()
-    print("Seeded successfully!")   
+
+    print("Done seeding!")

@@ -5,7 +5,7 @@ from flask_migrate import Migrate
 from datetime import datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/event_booking.db'
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -13,6 +13,12 @@ migrate = Migrate(app, db)
 CORS(app)
 
 from models import Event, Ticket  # Import models after db is defined
+
+# Homepage route
+@app.route('/')
+def index():
+    return jsonify({'message': '🎉 Welcome to the Event Booking API!'}), 200
+
 @app.route('/events', methods=['POST'])
 def create_event():
     data = request.get_json()

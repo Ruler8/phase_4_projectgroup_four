@@ -1,0 +1,50 @@
+{
+  "info": {
+    "_postman_id": "ea47e09e-b3d9-4293-8ab1-d31ff4b0edcd",
+    "name": "Event Booking API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Event",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"CodeFest 2025\",\n  \"location\": \"Nairobi\",\n  \"date\": \"2025-12-10T10:00:00\",\n  \"description\": \"Developer Conference\",\n  \"is_paid\": true,\n  \"capacity\": 200\n}"
+        },
+        "url": { "raw": "http://127.0.0.1:5000/events", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["events"] }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Event by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/events/1",
+          "protocol": "http",
+          "host": ["127.0.0.1"],
+          "port": "5000",
+          "path": ["events", "1"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Ticket",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"ticket_type\": \"VIP\",\n  \"price\": 3000,\n  \"event_id\": 1\n}"
+        },
+        "url": { "raw": "http://127.0.0.1:5000/tickets", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["tickets"] }
+      },
+      "response": []
+    }
+  ]
+}
