@@ -77,6 +77,31 @@ def create_ticket():
 
     except KeyError as e:
         return jsonify({'error': f'Missing field: {e.args[0]}'}), 400
+@app.route('/admin/bookings', methods=['GET'])
+def get_all_bookings():
+    tickets = Ticket.query.all()
+    return jsonify([{
+        'id': ticket.id,
+        'ticket_type': ticket.ticket_type,
+        'price': ticket.price,
+        'event': {
+            'id': ticket.event.id,
+            'name': ticket.event.name,
+            'location': ticket.event.location,
+            'date': ticket.event.date.isoformat()
+        }
+    } for ticket in tickets]), 200
+
+
+@app.route('/bookings/<int:id>', methods=['DELETE'])
+def delete_ticket(id):
+    ticket = Ticket.query.get(id)
+    if not ticket:
+        return jsonify({'error': 'Ticket not found'}), 404
+
+    db.session.delete(ticket)
+    db.session.commit()
+    return jsonify({'message': f'Ticket with ID {id} deleted'}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
