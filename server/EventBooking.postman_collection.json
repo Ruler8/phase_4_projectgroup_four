@@ -14,7 +14,13 @@
           "mode": "raw",
           "raw": "{\n  \"name\": \"CodeFest 2025\",\n  \"location\": \"Nairobi\",\n  \"date\": \"2025-12-10T10:00:00\",\n  \"description\": \"Developer Conference\",\n  \"is_paid\": true,\n  \"capacity\": 200\n}"
         },
-        "url": { "raw": "http://127.0.0.1:5000/events", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["events"] }
+        "url": {
+          "raw": "http://127.0.0.1:5000/events",
+          "protocol": "http",
+          "host": ["127.0.0.1"],
+          "port": "5000",
+          "path": ["events"]
+        }
       },
       "response": []
     },
@@ -42,7 +48,43 @@
           "mode": "raw",
           "raw": "{\n  \"ticket_type\": \"VIP\",\n  \"price\": 3000,\n  \"event_id\": 1\n}"
         },
-        "url": { "raw": "http://127.0.0.1:5000/tickets", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["tickets"] }
+        "url": {
+          "raw": "http://127.0.0.1:5000/tickets",
+          "protocol": "http",
+          "host": ["127.0.0.1"],
+          "port": "5000",
+          "path": ["tickets"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET All Bookings (Admin)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/admin/bookings",
+          "protocol": "http",
+          "host": ["127.0.0.1"],
+          "port": "5000",
+          "path": ["admin", "bookings"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE Ticket by ID",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/bookings/1",
+          "protocol": "http",
+          "host": ["127.0.0.1"],
+          "port": "5000",
+          "path": ["bookings", "1"]
+        }
       },
       "response": []
     }
