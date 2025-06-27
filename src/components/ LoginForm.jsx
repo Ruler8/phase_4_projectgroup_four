@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function LoginForm() {
+export default function LoginForm({ isAdmin = false }) {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -13,7 +13,13 @@ export default function LoginForm() {
     e.preventDefault();
     if (form.email && form.password) {
       localStorage.setItem("token", "dummy-token");
-      navigate("/dashboard");
+
+      // Redirect to correct dashboard
+      if (isAdmin) {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
     } else {
       setError("Please fill in all fields.");
     }
@@ -24,7 +30,9 @@ export default function LoginForm() {
       onSubmit={handleSubmit}
       className="max-w-sm mx-auto mt-20 p-6 bg-white rounded shadow"
     >
-      <h2 className="text-xl mb-4 font-semibold text-center">Login</h2>
+      <h2 className="text-xl mb-4 font-semibold text-center">
+        {isAdmin ? "Admin Login" : "User Login"}
+      </h2>
       {error && <p className="text-red-500">{error}</p>}
       <input
         name="email"
@@ -46,7 +54,7 @@ export default function LoginForm() {
         type="submit"
         className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
       >
-        Login
+        {isAdmin ? "Login as Admin" : "Login as User"}
       </button>
     </form>
   );
