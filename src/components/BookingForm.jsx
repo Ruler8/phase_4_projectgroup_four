@@ -2,12 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { mockEvents } from "../data/events";
 import { motion } from "framer-motion";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function BookingForm() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [event, setEvent] = useState(null);
-  const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    price: "",
+    date: ""
+  });
 
   useEffect(() => {
     const selected = mockEvents.find((e) => e.id === id);
@@ -19,9 +27,19 @@ function BookingForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Log form data
     console.log("Booking Submitted:", { eventId: id, ...formData });
-    alert("Booking submitted (mock)!");
-    setFormData({ name: "", email: "", phone: "" });
+
+    // ✅ Show Toast
+    toast.success("🎉 Booking successful!", {
+      position: "top-center",
+      autoClose: 3000,
+      theme: "colored"
+    });
+
+    // Reset form
+    setFormData({ name: "", email: "", phone: "", price: "", date: "" });
   };
 
   const handleReturn = () => {
@@ -38,7 +56,9 @@ function BookingForm() {
         transition={{ type: "spring", stiffness: 80, damping: 15 }}
         className="max-w-xl mx-auto bg-white rounded shadow p-8 border-l-4 border-red-600"
       >
-        <h2 className="text-2xl font-bold text-red-800 mb-2">Book: {event.title}</h2>
+        <h2 className="text-2xl font-bold text-red-800 mb-2">
+          Book: {event.title}
+        </h2>
         <p className="text-sm mb-6 text-gray-600">
           {event.location} — {event.date}
         </p>
@@ -66,10 +86,29 @@ function BookingForm() {
             type="tel"
             name="phone"
             placeholder="0712345678"
+            required
             value={formData.phone}
             onChange={handleChange}
             className="w-full p-2 border rounded"
           />
+          <input
+            type="number"
+            name="price"
+            placeholder="Ticket Price"
+            required
+            value={formData.price}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+          />
+          <input
+            type="date"
+            name="date"
+            required
+            value={formData.date}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+          />
+
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -89,6 +128,9 @@ function BookingForm() {
           ← Return to Events
         </motion.button>
       </motion.div>
+
+      {/* ✅ Toast Container */}
+      <ToastContainer />
     </div>
   );
 }

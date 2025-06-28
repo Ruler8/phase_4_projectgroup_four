@@ -8,13 +8,13 @@ const container = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: { staggerChildren: 0.15 },
+    transition: { staggerChildren: 0.1 },
   },
 };
 
 const card = {
-  hidden: { opacity: 0, scale: 0.95 },
-  show: { opacity: 1, scale: 1 },
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 },
 };
 
 function Home() {
@@ -28,53 +28,62 @@ function Home() {
     <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900">
       <Navbar />
 
-      <header className="bg-red-100 py-10 shadow-inner">
-        <div className="container mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-2 text-red-800">Discover Events Near You</h2>
-          <p className="text-lg">From music festivals to tech conferences – book your spot now.</p>
+      {/* Hero Section */}
+      <header className="bg-gradient-to-r from-red-600 to-red-400 py-16 text-white shadow-lg">
+        <div className="container mx-auto text-center px-4">
+          <h1 className="text-5xl font-extrabold mb-4 drop-shadow-md">Find & Book Your Next Experience</h1>
+          <p className="text-lg max-w-xl mx-auto">Concerts, conferences, meetups, and more – all in one place. Reserve your spot now!</p>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 flex-grow">
-        <h3 className="text-2xl font-bold text-red-800 mb-6">All Events</h3>
+      {/* Event List */}
+      <main className="container mx-auto px-4 py-10 flex-grow">
+        <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Upcoming Events</h2>
 
         <motion.div
           variants={container}
           initial="hidden"
           animate="show"
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {events.map((event) => (
             <motion.div
               key={event.id}
               variants={card}
-              className="bg-teal-100 rounded-lg shadow-md border-t-4 border-red-600 p-4 flex flex-col justify-between h-60"
+              className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 hover:shadow-xl transition duration-300"
             >
-              <div>
-                <h4 className="text-lg font-semibold text-red-800">{event.title}</h4>
-                <p className="mt-1 text-sm text-gray-700 line-clamp-3">
-                  {event.description}
-                </p>
+              {/* Optional Image Placeholder */}
+              <div className="bg-gray-100 h-40 flex items-center justify-center text-gray-400 text-sm italic">
+                Event Image
               </div>
 
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Link
-                  to={`/events/${event.id}/book`}
-                  className="block mt-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 text-sm rounded shadow text-center"
+              <div className="p-6 flex flex-col justify-between h-[250px]">
+                <div>
+                  <h3 className="text-xl font-semibold text-red-700">{event.title}</h3>
+                  <p className="text-sm text-gray-600 mt-2 line-clamp-3">{event.description}</p>
+                </div>
+
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="mt-4"
                 >
-                  Book Now
-                </Link>
-              </motion.div>
+                  <Link
+                    to={`/events/${event.id}/book`}
+                    className="block w-full bg-red-600 hover:bg-red-700 text-white font-medium text-center py-2 px-4 rounded-lg transition duration-200"
+                  >
+                    Book Now
+                  </Link>
+                </motion.div>
+              </div>
             </motion.div>
           ))}
         </motion.div>
       </main>
 
-      <footer className="bg-red-800 text-white text-center p-4 mt-10">
-        &copy; {new Date().getFullYear()} Eventify. Crafted with ❤️
+      {/* Footer */}
+      <footer className="bg-gray-800 text-white text-center p-5 mt-12">
+        <p>&copy; {new Date().getFullYear()} <span className="font-semibold text-red-400">Eventify</span>. All rights reserved.</p>
       </footer>
     </div>
   );
