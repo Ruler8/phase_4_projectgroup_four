@@ -79,7 +79,7 @@ function Contact() {
 
       {/* ✅ Toast Container */}
       <ToastContainer
-        position="top-center"
+        position="right-center"
         autoClose={2500}
         hideProgressBar
         newestOnTop

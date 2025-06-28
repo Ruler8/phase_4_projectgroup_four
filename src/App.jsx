@@ -6,6 +6,9 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import DashboardPage from './pages/DashboardPage';
 import AdminPage from './pages/AdminPage';
+import EventList from './components/EventList';
+import BookingForm from './components/BookingForm';
+import Contact from './pages/Contact';
 
 export default function App() {
   return (
@@ -45,16 +48,7 @@ export default function App() {
                 Admin Login
               </NavLink>
             </li>
-            <li>
-              <NavLink
-                to="/register"
-                className={({ isActive }) =>
-                  isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"
-                }
-              >
-                Register
-              </NavLink>
-            </li>
+            
             <li>
               <NavLink
                 to="/dashboard"
@@ -74,6 +68,14 @@ export default function App() {
               >
                 Admin
               </NavLink>
+              <NavLink
+                to="/contact"
+                className={({ isActive }) =>
+                  isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"
+                }
+              >
+               Contact us 
+              </NavLink>
             </li>
           </ul>
         </div>
@@ -86,21 +88,6 @@ export default function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/admin" element={<AdminPage />} />
-      </Routes>
-    </Router>
-  );
-}
-
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import EventList from "./components/EventList";
-import BookingForm from "./components/BookingForm";
-import Contact from "./pages/Contact";
-
-function App() {
-  return (
-    <Router>
-      <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<EventList />} />
         <Route path="/events/:id/book" element={<BookingForm />} />
@@ -109,5 +96,3 @@ function App() {
     </Router>
   );
 }
-
-export default App;
