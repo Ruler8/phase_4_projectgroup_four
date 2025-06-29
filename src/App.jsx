@@ -7,6 +7,24 @@ import Register from './pages/Register';
 import DashboardPage from './pages/DashboardPage';
 import AdminPage from './pages/AdminPage';
 
+
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+function RoleRedirector() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    if (role === "admin") navigate("/admin");
+    else if (role === "user") navigate("/dashboard");
+    else navigate("/login");
+  }, []);
+
+  return null;
+}
+
+
 export default function App() {
   return (
     <Router>
@@ -81,11 +99,12 @@ export default function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/redirect" element={<RoleRedirector />} />
       </Routes>
     </Router>
   );
