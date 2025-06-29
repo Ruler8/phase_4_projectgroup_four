@@ -1,7 +1,7 @@
 from flask import jsonify, request
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import db, User, Events, Ticket, Booking
+from models import db, User, Event, Ticket, Booking
 
 
 def register_routes(app):
@@ -15,45 +15,51 @@ def register_routes(app):
         return jsonify({"Welcome": "Get your tickets now!"})
 
      # Register Users: Attendees and Administrators
-    @app.route("/register", methods=["POST"])
+    @app.route("/register", methods=["POST"])   
     def register():
         data = request.get_json()
+        required_fields = ["name", "email", "phone", "password"]
         if not data:
-            return jsonify({"error": "Invalid input"}), 400
-
-        name = data.get("name")
-        email = data.get("email")
-        phone = data.get("phone")
-        password = data.get("password")
+            return jsonify({"error": "Invalid input. JSON data required."}), 400
+        missing = [field for field in required_fields if field not in data or not data[field]]
+        if missing:
+            return jsonify({"error": f"Missing required fields: {', '.join(missing)}"}), 400
+        if User.query.filter_by(email=data["email"]).first():
+            return jsonify({"error": "User already exists with this email"}), 400
+        password_hash = generate_password_hash(data["password"])
         role = data.get("role", "attendee")
 
-        if not all([name, email, phone, password, role]):
-            return jsonify({"error": "Missing required fields"}), 400
-
-        if User.query.filter_by(email=email).first():
-            return jsonify({"error": "User already exists"}), 400
-
-        password_hash = generate_password_hash(password)
-
-        user = User(name=name, email=email, phone=phone,
-                    password_hash=password_hash, role=role)
+        user = User(
+        name=data["name"],
+        email=data["email"],
+        phone=data["phone"],
+        password_hash=password_hash,
+        role=role
+    )
         db.session.add(user)
         db.session.commit()
-
         return jsonify(user.to_dict()), 201
+
 
     # Users Login: Attendees and Administrators
     @app.route("/login", methods=["POST"])
     def login():
         data = request.get_json()
+        if not data:
+            return jsonify({"error": "Invalid input. JSON data required."}), 400
         email = data.get("email")
         password = data.get("password")
-
+        if not email or not password:
+            return jsonify({"error": "Email and password are required"}), 400
         user = User.query.filter_by(email=email).first()
         if not user or not check_password_hash(user.password_hash, password):
             return jsonify({"error": "Invalid credentials"}), 401
-
-        return jsonify({"message": "Login successful", "user_id": user.id, "user": user.to_dict()}), 200
+        return jsonify({
+        "message": "Login successful",
+        "user_id": user.id,
+        "user": user.to_dict()
+    }), 200
+            
 
     # Retrieve All Users (Admin Only)
 
@@ -148,14 +154,14 @@ def register_routes(app):
     # Returns a list of all event records in the database
     @app.route("/events", methods=["GET"])
     def get_events():
-        events = Events.query.all()
+        events = Event.query.all()
         return jsonify([event.to_dict() for event in events]), 200
 
     # Returns all events where the name matches case-insensitively.
     @app.route("/events/search", methods=["GET"])
     def search_events():
         name = request.args.get("name", "")
-        events = Events.query.filter(Events.name.ilike(f"%{name}%")).all()
+        events = Event.query.filter(Event.name.ilike(f"%{name}%")).all()
         return jsonify([event.to_dict() for event in events]), 200
 
     # Admin-only Event Creation
@@ -182,7 +188,7 @@ def register_routes(app):
         if end_time <= start_time:
             return jsonify({"error": "End time must be after start time"}), 400
 
-        event = Events(
+        event = Event(
             name=data["name"],
             description=data["description"],
             location=data["location"],
@@ -204,7 +210,7 @@ def register_routes(app):
         if not is_admin(requester_id):
             return jsonify({"error": "Unauthorized. Admin access required."}), 403
 
-        event = Events.query.get(event_id)
+        event = Event.query.get(event_id)
         if not event:
             return jsonify({"error": "Event not found"}), 404
 
@@ -229,7 +235,7 @@ def register_routes(app):
         if not all(field in data for field in required_fields):
             return jsonify({"error": "Missing ticket data"}), 400
 
-        event = Events.query.get(data["event_id"])
+        event = Event.query.get(data["event_id"])
         if not event:
             return jsonify({"error": "Event not found"}), 404
 
@@ -282,7 +288,7 @@ def register_routes(app):
         if not user:
             return jsonify({"error": "Invalid user ID"}), 404
 
-        event = Events.query.get(event_id)
+        event = Event.query.get(event_id)
         if not event:
             return jsonify({"error": "Invalid event ID"}), 404
 
@@ -338,7 +344,7 @@ def register_routes(app):
         if not is_admin(requester_id):
             return jsonify({"error": "Unauthorized. Admin access required."}), 403
 
-        event = Events.query.get(event_id)
+        event = Event.query.get(event_id)
         if not event:
             return jsonify({"error": "Event not found"}), 404
 

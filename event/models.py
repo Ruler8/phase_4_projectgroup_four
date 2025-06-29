@@ -16,18 +16,16 @@ class User(db.Model):
     bookings = db.relationship('Booking', backref='user', cascade="all, delete-orphan")
 
     def to_dict(self):
-        return {
+        return{
             "id": self.id,
             "name": self.name,
             "email": self.email,
             "phone": self.phone,
-            "password_hash":self.password_hash,
             "role": self.role,
             "created_at": self.created_at
         }
-
-
-class Events(db.Model):
+      
+class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(255), nullable=False)
@@ -57,7 +55,7 @@ class Events(db.Model):
 
 class Ticket(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     type = db.Column(db.String(50), nullable=False)
     price = db.Column(db.Float, nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
@@ -79,7 +77,7 @@ class Ticket(db.Model):
 class Booking(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     ticket_id = db.Column(db.Integer, db.ForeignKey('ticket.id'), nullable=False)
     attendee_name = db.Column(db.String(50), nullable=False)
     attendee_email = db.Column(db.String(100), nullable=True)
