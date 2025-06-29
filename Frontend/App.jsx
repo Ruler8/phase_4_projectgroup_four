@@ -10,6 +10,24 @@ import EventList from './components/EventList';
 import BookingForm from './components/BookingForm';
 import Contact from './pages/Contact';
 
+
+
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+function RoleRedirector() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    if (role === "admin") navigate("/admin");
+    else if (role === "user") navigate("/dashboard");
+    else navigate("/login");
+  }, []);
+
+  return null;
+}
+
 export default function App() {
   return (
     <Router>
@@ -68,6 +86,8 @@ export default function App() {
               >
                 Admin
               </NavLink>
+              </li>
+              <li>
               <NavLink
                 to="/contact"
                 className={({ isActive }) =>
@@ -92,6 +112,7 @@ export default function App() {
         <Route path="/events" element={<EventList />} />
         <Route path="/events/:id/book" element={<BookingForm />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/redirect" element={<RoleRedirector />} />
       </Routes>
     </Router>
   );
