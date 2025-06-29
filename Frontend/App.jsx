@@ -48,6 +48,16 @@ export default function App() {
             </li>
             <li>
               <NavLink
+                to="/register"
+                className={({ isActive }) =>
+                  isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"
+                }
+              >
+                Register
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
                 to="/login"
                 className={({ isActive }) =>
                   isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"
