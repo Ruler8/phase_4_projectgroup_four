@@ -10,6 +10,24 @@ import EventList from './components/EventList';
 import BookingForm from './components/BookingForm';
 import Contact from './pages/Contact';
 
+
+
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+function RoleRedirector() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    if (role === "admin") navigate("/admin");
+    else if (role === "user") navigate("/dashboard");
+    else navigate("/login");
+  }, []);
+
+  return null;
+}
+
 export default function App() {
   return (
     <Router>
@@ -27,6 +45,16 @@ export default function App() {
                 }
               >
                 Home
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/register"
+                className={({ isActive }) =>
+                  isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"
+                }
+              >
+                Register
               </NavLink>
             </li>
             <li>
@@ -68,18 +96,8 @@ export default function App() {
               >
                 Admin
               </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/event-list"
-                className={({ isActive }) =>
-                  isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"
-                }
-              >
-                Events
-              </NavLink>
-            </li>
-            <li>
+              </li>
+              <li>
               <NavLink
                 to="/contact"
                 className={({ isActive }) =>
@@ -104,6 +122,7 @@ export default function App() {
         <Route path="/event-list" element={<EventList />} />
         <Route path="/events/:id/book" element={<BookingForm />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/redirect" element={<RoleRedirector />} />
       </Routes>
     </Router>
   );
