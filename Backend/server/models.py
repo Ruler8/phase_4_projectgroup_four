@@ -3,6 +3,7 @@ from datetime import datetime
 
 class Event(db.Model):
     __tablename__ = 'events'
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
@@ -10,6 +11,8 @@ class Event(db.Model):
     date = db.Column(db.DateTime, nullable=False)
     is_paid = db.Column(db.Boolean, default=False)
     capacity = db.Column(db.Integer, nullable=False)
+
+    image_url = db.Column(db.String)
 
     tickets = db.relationship('Ticket', backref='event', cascade='all, delete')
 
@@ -22,11 +25,13 @@ class Event(db.Model):
             'date': self.date.isoformat(),
             'is_paid': self.is_paid,
             'capacity': self.capacity,
+            'image_url': self.image_url,  
             'tickets': [ticket.to_dict() for ticket in self.tickets]
         }
 
 class Ticket(db.Model):
     __tablename__ = 'tickets'
+
     id = db.Column(db.Integer, primary_key=True)
     ticket_type = db.Column(db.String, nullable=False)
     price = db.Column(db.Float)
@@ -38,4 +43,4 @@ class Ticket(db.Model):
             'ticket_type': self.ticket_type,
             'price': self.price,
             'event_id': self.event_id
-        }   
+        }
