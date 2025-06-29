@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import { motion } from "framer-motion";
 
 const container = {
@@ -36,7 +35,7 @@ function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900">
-      <Navbar />
+      {/* ✅ Removed Navbar */}
 
       {/* Hero Section */}
       <header className="bg-gradient-to-r from-red-600 to-red-400 py-16 text-white shadow-lg">

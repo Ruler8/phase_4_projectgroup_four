@@ -1,4 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+// Pages and Components
 import Home from './pages/Home';
 import logo from './assets/logobooking.jpg';
 import AdminLogin from './pages/AdminLogin';
@@ -6,15 +10,11 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import DashboardPage from './pages/DashboardPage';
 import AdminPage from './pages/AdminPage';
-import EventList from './components/EventList';
+import EventList from './pages/EventList';  // ✅ make sure EventList.jsx is in pages/ or correct path
 import BookingForm from './components/BookingForm';
 import Contact from './pages/Contact';
 
-
-
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-
+// Redirector for role-based navigation
 function RoleRedirector() {
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ function RoleRedirector() {
     if (role === "admin") navigate("/admin");
     else if (role === "user") navigate("/dashboard");
     else navigate("/login");
-  }, []);
+  }, [navigate]);
 
   return null;
 }
@@ -38,73 +38,43 @@ export default function App() {
           <span className="font-bold text-lg">Event Booking</span>
           <ul className="flex gap-6 text-sm">
             <li>
-              <NavLink
-                to="/"
-                className={({ isActive }) =>
-                  isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"
-                }
-              >
+              <NavLink to="/" className={({ isActive }) => isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"}>
                 Home
               </NavLink>
             </li>
             <li>
-              <NavLink
-                to="/register"
-                className={({ isActive }) =>
-                  isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"
-                }
-              >
+              <NavLink to="/event-list" className={({ isActive }) => isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"}>
+                Events
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/register" className={({ isActive }) => isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"}>
                 Register
               </NavLink>
             </li>
             <li>
-              <NavLink
-                to="/login"
-                className={({ isActive }) =>
-                  isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"
-                }
-              >
+              <NavLink to="/login" className={({ isActive }) => isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"}>
                 User Login
               </NavLink>
             </li>
             <li>
-              <NavLink
-                to="/admin-login"
-                className={({ isActive }) =>
-                  isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"
-                }
-              >
+              <NavLink to="/admin-login" className={({ isActive }) => isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"}>
                 Admin Login
               </NavLink>
             </li>
             <li>
-              <NavLink
-                to="/dashboard"
-                className={({ isActive }) =>
-                  isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"
-                }
-              >
+              <NavLink to="/dashboard" className={({ isActive }) => isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"}>
                 Dashboard
               </NavLink>
             </li>
             <li>
-              <NavLink
-                to="/admin"
-                className={({ isActive }) =>
-                  isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"
-                }
-              >
+              <NavLink to="/admin" className={({ isActive }) => isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"}>
                 Admin
               </NavLink>
-              </li>
-              <li>
-              <NavLink
-                to="/contact"
-                className={({ isActive }) =>
-                  isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"
-                }
-              >
-                Contact us
+            </li>
+            <li>
+              <NavLink to="/contact" className={({ isActive }) => isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"}>
+                Contact Us
               </NavLink>
             </li>
           </ul>
@@ -127,3 +97,4 @@ export default function App() {
     </Router>
   );
 }
+  
