@@ -13,6 +13,7 @@ import Contact from './pages/Contact';
 export default function App() {
   return (
     <Router>
+      {/* Navbar */}
       <nav className="bg-gray-900 p-4 text-white shadow">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <img src={logo} alt="Logo" className="w-10 h-10 rounded-full" />
@@ -48,7 +49,6 @@ export default function App() {
                 Admin Login
               </NavLink>
             </li>
-            
             <li>
               <NavLink
                 to="/dashboard"
@@ -68,19 +68,32 @@ export default function App() {
               >
                 Admin
               </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/event-list"
+                className={({ isActive }) =>
+                  isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"
+                }
+              >
+                Events
+              </NavLink>
+            </li>
+            <li>
               <NavLink
                 to="/contact"
                 className={({ isActive }) =>
                   isActive ? "text-yellow-400 font-semibold" : "hover:text-yellow-400"
                 }
               >
-               Contact us 
+                Contact us
               </NavLink>
             </li>
           </ul>
         </div>
       </nav>
 
+      {/* Routes */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/admin-login" element={<AdminLogin />} />
@@ -88,8 +101,7 @@ export default function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/admin" element={<AdminPage />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/events" element={<EventList />} />
+        <Route path="/event-list" element={<EventList />} />
         <Route path="/events/:id/book" element={<BookingForm />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>

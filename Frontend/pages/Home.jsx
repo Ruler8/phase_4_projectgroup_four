@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { mockEvents } from "../data/events";
 import { motion } from "framer-motion";
 
 const container = {
@@ -21,7 +20,18 @@ function Home() {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    setEvents(mockEvents);
+    fetch("http://localhost:5000/events")
+      .then((res) => {
+        if (!res.ok) throw new Error("Network response was not ok");
+        return res.json();
+      })
+      .then((data) => {
+        setEvents(data);
+        console.log("✅ Events fetched:", data);
+      })
+      .catch((err) => {
+        console.error("❌ Failed to fetch events:", err);
+      });
   }, []);
 
   return (
@@ -40,45 +50,48 @@ function Home() {
       <main className="container mx-auto px-4 py-10 flex-grow">
         <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Upcoming Events</h2>
 
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          {events.map((event) => (
-            <motion.div
-              key={event.id}
-              variants={card}
-              className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 hover:shadow-xl transition duration-300"
-            >
-              {/* Optional Image Placeholder */}
-              <div className="bg-gray-100 h-40 flex items-center justify-center text-gray-400 text-sm italic">
-                Event Image
-              </div>
-
-              <div className="p-6 flex flex-col justify-between h-[250px]">
-                <div>
-                  <h3 className="text-xl font-semibold text-red-700">{event.title}</h3>
-                  <p className="text-sm text-gray-600 mt-2 line-clamp-3">{event.description}</p>
+        {events.length === 0 ? (
+          <p className="text-center text-gray-600">No events available.</p>
+        ) : (
+          <motion.div
+            variants={container}
+            initial="hidden"
+            animate="show"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            {events.map((event) => (
+              <motion.div
+                key={event.id}
+                variants={card}
+                className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 hover:shadow-xl transition duration-300"
+              >
+                <div className="bg-gray-100 h-40 flex items-center justify-center text-gray-400 text-sm italic">
+                  Event Image
                 </div>
 
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="mt-4"
-                >
-                  <Link
-                    to={`/events/${event.id}/book`}
-                    className="block w-full bg-red-600 hover:bg-red-700 text-white font-medium text-center py-2 px-4 rounded-lg transition duration-200"
+                <div className="p-6 flex flex-col justify-between h-[250px]">
+                  <div>
+                    <h3 className="text-xl font-semibold text-red-700">{event.name}</h3>
+                    <p className="text-sm text-gray-600 mt-2 line-clamp-3">{event.description}</p>
+                  </div>
+
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="mt-4"
                   >
-                    Book Now
-                  </Link>
-                </motion.div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+                    <Link
+                      to={`/events/${event.id}/book`}
+                      className="block w-full bg-red-600 hover:bg-red-700 text-white font-medium text-center py-2 px-4 rounded-lg transition duration-200"
+                    >
+                      Book Now
+                    </Link>
+                  </motion.div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
       </main>
 
       {/* Footer */}

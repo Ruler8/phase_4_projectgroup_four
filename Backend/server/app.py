@@ -12,12 +12,17 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 CORS(app)
 
-from models import Event, Ticket  # Import models after db is defined
+from models import Event, Ticket  # Import after db is defined
 
-# Homepage route
 @app.route('/')
 def index():
     return jsonify({'message': '🎉 Welcome to the Event Booking API!'}), 200
+
+# ✅ This is the NEW route you're missing!
+@app.route('/events', methods=['GET'])
+def get_events():
+    events = Event.query.all()
+    return jsonify([event.to_dict() for event in events]), 200
 
 @app.route('/events', methods=['POST'])
 def create_event():
@@ -77,6 +82,7 @@ def create_ticket():
 
     except KeyError as e:
         return jsonify({'error': f'Missing field: {e.args[0]}'}), 400
+
 @app.route('/admin/bookings', methods=['GET'])
 def get_all_bookings():
     tickets = Ticket.query.all()
@@ -91,7 +97,6 @@ def get_all_bookings():
             'date': ticket.event.date.isoformat()
         }
     } for ticket in tickets]), 200
-
 
 @app.route('/bookings/<int:id>', methods=['DELETE'])
 def delete_ticket(id):
