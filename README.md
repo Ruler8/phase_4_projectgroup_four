@@ -83,19 +83,30 @@ npm run dev
 Project Structure
 
 eventify/
-├── backend/
-│   ├── app.py
-│   ├── models.py
-│   ├── routes.py
-│   └── seed.py
-├── frontend/
+├── backend/                          # Flask backend
+│   ├── app.py                       # Flask app entry point
+│   ├── models.py                    # SQLAlchemy models (User, Event, Ticket, Booking)
+│   ├── routes.py                    # Flask API routes
+│   └── seed.py                      # Seed script for initial test data
+│
+├── frontend/                         # React frontend (Vite)
 │   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   └── index.html
-└── README.md
+│   │   ├── components/              # Reusable UI components (forms, tables, buttons)
+│   │   ├── pages/                   # Route-based page components
+│   │   │   ├── AdminLogin.jsx      # Login page for admin users
+│   │   │   ├── AdminPage.jsx       # Admin dashboard with event/ticket controls
+│   │   │   ├── Contact.jsx         # Contact form/page
+│   │   │   ├── DashboardPage.jsx   # User dashboard showing bookings/events
+│   │   │   ├── EventList.jsx       # Displays a list of all available events
+│   │   │   ├── Home.jsx            # Public homepage with general info
+│   │   │   ├── Login.jsx           # User login page
+│   │   │   ├── Register.jsx        # User registration page
+│   │   │   └── index.jsx           # Central exports or page router (if used)
+│   │   ├── App.jsx                 # Main app component with route definitions
+│   │   └── main.jsx                # React entry point
+│   └── index.html                  # HTML template used by Vite
+│
+└── README.md                       # Project documentation
 
 🖼️ UI Screens
 
