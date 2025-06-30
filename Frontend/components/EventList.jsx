@@ -9,11 +9,12 @@ function EventList() {
   useEffect(() => {
     fetch("http://localhost:5000/events")
       .then((res) => res.json())
-      .then((data) => setEvents(data));
+      .then((data) => setEvents(data))
+      .catch((error) => console.error("Error fetching events:", error));
   }, []);
 
   const filteredEvents = events.filter((event) =>
-    event.title.toLowerCase().includes(searchTerm.toLowerCase())
+    event.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -22,18 +23,18 @@ function EventList() {
         Browse All Events
       </h2>
 
-      {/* Search Bar */}
+      {/* 🔎 Search */}
       <div className="max-w-md mx-auto mb-6">
         <input
           type="text"
-          placeholder="Search events by title..."
+          placeholder="Search events by name..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full p-3 border border-gray-700 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-red-400"
         />
       </div>
 
-      {/* Go Back Button */}
+      {/* 🔙 Go Back */}
       <div className="mb-6 text-center">
         <button
           onClick={() => navigate(-1)}
@@ -43,24 +44,43 @@ function EventList() {
         </button>
       </div>
 
-      {/* Event Table */}
+      {/* 📋 Event Table */}
       <div className="overflow-x-auto bg-gray-800 rounded-lg shadow">
         <table className="min-w-full divide-y divide-gray-700">
           <thead className="bg-red-600 text-white">
             <tr>
-              <th className="text-left px-6 py-4 text-sm font-semibold uppercase">Title</th>
-              <th className="text-left px-6 py-4 text-sm font-semibold uppercase">Location</th>
-              <th className="text-left px-6 py-4 text-sm font-semibold uppercase">Date</th>
-              <th className="text-left px-6 py-4 text-sm font-semibold uppercase">Actions</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold uppercase">Image</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold uppercase">Name</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold uppercase">Location</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold uppercase">Date</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold uppercase">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
             {filteredEvents.length > 0 ? (
               filteredEvents.map((event) => (
                 <tr key={event.id} className="hover:bg-gray-700 transition">
-                  <td className="px-6 py-4 font-medium text-white">{event.title}</td>
+                  <td className="px-6 py-4">
+                    <img
+                      src={
+                        event.image_url && event.image_url.trim() !== ""
+                          ? event.image_url
+                          : "https://via.placeholder.com/100x100?text=No+Image"
+                      }
+                      alt={event.name}
+                      className="h-16 w-24 object-cover rounded"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src =
+                          "https://via.placeholder.com/100x100?text=Broken+Image";
+                      }}
+                    />
+                  </td>
+                  <td className="px-6 py-4 font-medium">{event.name}</td>
                   <td className="px-6 py-4 text-gray-300">{event.location}</td>
-                  <td className="px-6 py-4 text-gray-300">{event.date}</td>
+                  <td className="px-6 py-4 text-gray-300">
+                    {new Date(event.date).toLocaleString()}
+                  </td>
                   <td className="px-6 py-4">
                     <Link
                       to={`/events/${event.id}`}
@@ -73,7 +93,7 @@ function EventList() {
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="px-6 py-6 text-center text-gray-400">
+                <td colSpan="5" className="px-6 py-6 text-center text-gray-400">
                   No matching events found.
                 </td>
               </tr>

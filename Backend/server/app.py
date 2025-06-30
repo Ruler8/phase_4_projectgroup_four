@@ -61,6 +61,44 @@ def get_event(id):
     event = Event.query.get_or_404(id)
     return jsonify(event.to_dict()), 200
 
+@app.route('/events/<int:id>', methods=['PATCH'])
+def update_event(id):
+    event = Event.query.get(id)
+    if not event:
+        return jsonify({'error': 'Event not found'}), 404
+
+    data = request.get_json()
+
+    if 'name' in data:
+        event.name = data['name']
+    if 'location' in data:
+        event.location = data['location']
+    if 'date' in data:
+        try:
+            new_date = datetime.fromisoformat(data['date'])
+            if new_date <= datetime.now():
+                return jsonify({'error': 'Event date must be in the future'}), 400
+            event.date = new_date
+        except ValueError:
+            return jsonify({'error': 'Invalid date format. Use ISO format'}), 400
+    if 'capacity' in data:
+        try:
+            new_capacity = int(data['capacity'])
+            if new_capacity <= 0:
+                return jsonify({'error': 'Capacity must be greater than 0'}), 400
+            event.capacity = new_capacity
+        except ValueError:
+            return jsonify({'error': 'Invalid capacity'}), 400
+    if 'description' in data:
+        event.description = data['description']
+    if 'is_paid' in data:
+        event.is_paid = data['is_paid']
+    if 'image_url' in data:
+        event.image_url = data['image_url']
+
+    db.session.commit()
+    return jsonify(event.to_dict()), 200
+
 @app.route('/events/<int:id>', methods=['DELETE'])
 def delete_event(id):
     event = Event.query.get(id)

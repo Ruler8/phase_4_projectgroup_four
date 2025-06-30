@@ -10,7 +10,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import DashboardPage from './pages/DashboardPage';
 import AdminPage from './pages/AdminPage';
-import EventList from './pages/EventList';  // ✅ make sure EventList.jsx is in pages/ or correct path
+import EventList from './pages/EventList';  // make sure EventList.jsx is in pages/ or correct path
 import BookingForm from './components/BookingForm';
 import Contact from './pages/Contact';
 
