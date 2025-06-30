@@ -12,13 +12,12 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 CORS(app)
 
-from models import Event, Ticket  # Import after db is defined
+from models import Event, Ticket
 
 @app.route('/')
 def index():
     return jsonify({'message': '🎉 Welcome to the Event Booking API!'}), 200
 
-# ✅ This is the NEW route you're missing!
 @app.route('/events', methods=['GET'])
 def get_events():
     events = Event.query.all()
@@ -33,6 +32,7 @@ def create_event():
         date = datetime.fromisoformat(data['date'])
         capacity = int(data['capacity'])
         is_paid = data.get('is_paid', False)
+        image_url = data.get('image_url', '')
 
         if capacity <= 0:
             return jsonify({'error': 'Capacity must be greater than 0'}), 400
@@ -45,7 +45,8 @@ def create_event():
             date=date,
             description=data.get('description', ''),
             is_paid=is_paid,
-            capacity=capacity
+            capacity=capacity,
+            image_url=image_url
         )
         db.session.add(new_event)
         db.session.commit()
@@ -59,6 +60,16 @@ def create_event():
 def get_event(id):
     event = Event.query.get_or_404(id)
     return jsonify(event.to_dict()), 200
+
+@app.route('/events/<int:id>', methods=['DELETE'])
+def delete_event(id):
+    event = Event.query.get(id)
+    if not event:
+        return jsonify({'error': 'Event not found'}), 404
+
+    db.session.delete(event)
+    db.session.commit()
+    return jsonify({'message': f'Event with ID {id} deleted'}), 200
 
 @app.route('/tickets', methods=['POST'])
 def create_ticket():

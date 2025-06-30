@@ -11,7 +11,6 @@ class Event(db.Model):
     date = db.Column(db.DateTime, nullable=False)
     is_paid = db.Column(db.Boolean, default=False)
     capacity = db.Column(db.Integer, nullable=False)
-
     image_url = db.Column(db.String)
 
     tickets = db.relationship('Ticket', backref='event', cascade='all, delete')
@@ -25,7 +24,7 @@ class Event(db.Model):
             'date': self.date.isoformat(),
             'is_paid': self.is_paid,
             'capacity': self.capacity,
-            'image_url': self.image_url,  
+            'image_url': self.image_url,
             'tickets': [ticket.to_dict() for ticket in self.tickets]
         }
 
