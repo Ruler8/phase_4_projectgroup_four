@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: event-booking-backend
+    env: python
+    plan: free
+
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn event.app:app
+
+    envVars:
+      - key: FLASK_ENV
+        value: production
