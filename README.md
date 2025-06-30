@@ -119,10 +119,10 @@ Contact.jsx: Feedback form + go back button
 
 All UI is responsive, styled using Tailwind CSS, and includes UX enhancements like hover states, modals, and animated transitions.
 
-👨‍💻 Author
+ Author
 
 Allan,Elvis,Warioba,Ian Built by passionate full-stack developers.
 
-📄 License
+License
 
 MIT License
