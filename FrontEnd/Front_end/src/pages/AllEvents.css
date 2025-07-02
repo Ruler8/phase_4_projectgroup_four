@@ -1,0 +1,86 @@
+.all-events-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.all-events-title {
+  text-align: center;
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.events-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.events-table th,
+.events-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.events-table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  color: #444;
+}
+
+.events-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-book,
+.btn-cancel {
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  border: none;
+}
+
+.btn-book {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.btn-book:hover {
+  background-color: #1e7e34;
+}
+
+.btn-cancel {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn-cancel:hover {
+  background-color: #a71d2a;
+}
+
+@media (max-width: 768px) {
+  .events-table th,
+  .events-table td {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .btn-book,
+  .btn-cancel {
+    font-size: 13px;
+    padding: 5px 10px;
+  }
+}

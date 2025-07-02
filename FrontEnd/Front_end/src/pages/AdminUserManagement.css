@@ -1,0 +1,102 @@
+.container {
+  width: 1000%;
+  margin: 0 auto;
+  padding: 20px;
+
+  /* Centering on full page */
+  min-height: 100vh; /* Full viewport height */
+  display: flex;
+  flex-direction: column;
+ 
+}
+
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.search-filter {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-filter input,
+.search-filter select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  flex: 1;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+.user-table th,
+.user-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.user-table th {
+  background-color: #f2f2f2;
+}
+
+.user-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.user-table button {
+  margin-right: 5px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+}
+
+.user-table .edit-btn {
+  background-color: #007bff;
+}
+
+.user-table .delete-btn {
+  background-color: #dc3545;
+}
+
+.edit-form {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  max-width: 500px;
+}
+
+.edit-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+}
+
+.edit-form button {
+  padding: 8px 12px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edit-form .save-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.edit-form .cancel-btn {
+  background-color: #6c757d;
+  color: white;
+}

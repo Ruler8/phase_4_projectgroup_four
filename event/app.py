@@ -1,8 +1,10 @@
 from flask import Flask
 from models import db
 from routes import register_routes
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)  # Enables CORS for all routes
 
 # Database configuration
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///event.db"

@@ -1,0 +1,97 @@
+.ticket-container {
+  max-width: 1000px;
+  width: 95%;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #fefefe;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.ticket-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.ticket-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+  overflow-x: auto;
+}
+
+.ticket-table th,
+.ticket-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.ticket-table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.ticket-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.ticket-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.ticket-form input,
+.ticket-form select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.btn-edit {
+  background-color: #f1c40f;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  margin-right: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-delete {
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-submit {
+  grid-column: span 2;
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  padding: 12px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+  display: block;
+  font-size: 16px;
+}
+
+.btn-submit:hover,
+.btn-edit:hover,
+.btn-delete:hover {
+  opacity: 0.9;
+}

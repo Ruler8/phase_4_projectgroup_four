@@ -21,26 +21,35 @@ def register_routes(app):
         required_fields = ["name", "email", "phone", "password"]
         if not data:
             return jsonify({"error": "Invalid input. JSON data required."}), 400
-        missing = [field for field in required_fields if field not in data or not data[field]]
+        missing = [field for field in required_fields if not data.get(field)]
         if missing:
-            return jsonify({"error": f"Missing required fields: {', '.join(missing)}"}), 400
-        if User.query.filter_by(email=data["email"]).first():
+             return jsonify({"error": f"Missing required fields: {', '.join(missing)}"}), 400
+        email = data["email"].strip().lower()
+        if User.query.filter_by(email=email).first():
             return jsonify({"error": "User already exists with this email"}), 400
-        password_hash = generate_password_hash(data["password"])
         role = data.get("role", "attendee")
-
+        if role not in ["admin", "attendee"]:
+            return jsonify({"error": "Invalid role."}), 400
         user = User(
-        name=data["name"],
-        email=data["email"],
-        phone=data["phone"],
-        password_hash=password_hash,
+        name=data["name"].strip(),
+        email=email,
+        phone=data["phone"].strip(),
+        password_hash=generate_password_hash(data["password"]),
         role=role
     )
-        db.session.add(user)
-        db.session.commit()
-        return jsonify(user.to_dict()), 201
-
-
+        
+        try:
+            db.session.add(user)
+            db.session.commit()
+            return jsonify({
+                "message": "User registered successfully",
+                "user": user.to_dict()
+                }), 201
+        
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"error": "Database error", "details": str(e)}), 500
+             
     # Users Login: Attendees and Administrators
     @app.route("/login", methods=["POST"])
     def login():
@@ -59,8 +68,9 @@ def register_routes(app):
         "user_id": user.id,
         "user": user.to_dict()
     }), 200
-            
-
+        
+             
+    
     # Retrieve All Users (Admin Only)
 
     @app.route("/users", methods=["GET"])
@@ -209,19 +219,35 @@ def register_routes(app):
         requester_id = request.args.get("requester_id", type=int)
         if not is_admin(requester_id):
             return jsonify({"error": "Unauthorized. Admin access required."}), 403
-
         event = Event.query.get(event_id)
         if not event:
-            return jsonify({"error": "Event not found"}), 404
-
+             return jsonify({"error": "Event not found"}), 404
+        
         # Delete related bookings and tickets
         Booking.query.filter_by(event_id=event_id).delete()
         Ticket.query.filter_by(event_id=event_id).delete()
         db.session.delete(event)
         db.session.commit()
-
         return jsonify({"message": "Event deleted successfully"}), 200
+    
 
+    @app.route("/events/<int:event_id>", methods=["PUT"])
+    def update_event(event_id):
+        data = request.get_json()
+        requester_id = request.args.get("requester_id", type=int)
+        if not is_admin(requester_id):
+            return jsonify({"error": "Unauthorized"}), 403
+        event = Event.query.get(event_id)
+        if not event:
+            return jsonify({"error": "Event not found"}), 404
+        for field in ["name", "description", "location", "category", "start_time", "end_time", "is_free"]:
+            if field in data:
+                setattr(event, field, data[field])
+                db.session.commit()
+                return jsonify(event.to_dict()), 200
+
+    
+    
         # Create Ticket (Admin Only)
     @app.route("/tickets", methods=["POST"])
     def create_ticket():
@@ -318,6 +344,7 @@ def register_routes(app):
 
         return jsonify(booking.to_dict()), 201
 
+    # get bookings by id
     @app.route("/bookings/user/<int:user_id>", methods=["GET"])
     def get_bookings_by_user(user_id):
         requester_id = request.args.get("requester_id", type=int)
@@ -350,6 +377,15 @@ def register_routes(app):
 
         bookings = Booking.query.filter_by(event_id=event_id).all()
         return jsonify([booking.to_dict() for booking in bookings]), 200
+    
+    #get all bookings
+    @app.route("/bookings/all", methods=["GET"])
+    def get_all_bookings():
+        requester_id = request.args.get("requester_id", type=int)
+        if not is_admin(requester_id):
+            return jsonify({"error": "Unauthorized. Admin access required."}), 403
+        bookings = Booking.query.all()
+        return jsonify([b.to_dict() for b in bookings]), 200
 
     # Delete Booking (Admin or Owner)
     @app.route("/bookings/<int:booking_id>", methods=["DELETE"])
@@ -378,3 +414,12 @@ def register_routes(app):
         db.session.commit()
 
         return jsonify({"message": "Booking deleted successfully"}), 200
+    
+    @app.route("/tickets", methods=["GET"])
+    def get_all_tickets():
+         tickets = Ticket.query.all()
+         return jsonify([ticket.to_dict() for ticket in tickets])
+
+   
+    
+

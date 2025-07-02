@@ -41,16 +41,18 @@ class Event(db.Model):
 
     def to_dict(self):
         return {
-            "id": self.id,
-            "name": self.name,
-            "description": self.description,
-            "location": self.location,
-            "category": self.category,
-            "start_time": self.start_time,
-            "end_time": self.end_time,
-            "is_free": self.is_free,
-            "created_at": self.created_at
-        }
+        "id": self.id,
+        "name": self.name,
+        "description": self.description,
+        "location": self.location,
+        "category": self.category,
+        "start_time": self.start_time.isoformat() if self.start_time else None,
+        "end_time": self.end_time.isoformat() if self.end_time else None,
+        "is_free": self.is_free,
+        "created_at": self.created_at.isoformat() if self.created_at else None
+    }
+    
+
 
 
 class Ticket(db.Model):
